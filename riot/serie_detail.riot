@@ -1,0 +1,219 @@
+<serie_detail>
+
+    <div class="movie-container">
+        <div id="movie-image">
+            <img src="{state.src_image}" alt="{state.titre}">
+        </div>
+
+        <div class= "movie-details">
+            <div id="bg_titre">
+                <h2><B>Titre du Film: {state.titre}</B></h2>
+            </div>
+
+            <div class="details">
+                <p class="categ"><B>Nombre de saisons: </B>{state.nb_saisons}</p>
+                <p class="categ"><B>Nombre d'épisodes: </B>{state.nb_episodes}</p>
+                <p class="categ"><B>Synopsis: </B>{state.synopsis}</p>
+                <p class="container_acteur"><B>Acteurs:</B>&nbsp &nbsp &nbsp 
+                    
+                    <a each="{ actor in state.acteurs }" href="#/acteur/detail/{ actor.id }" class="lien_acteur" target="">
+                        <img src="https://image.tmdb.org/t/p/w500{actor.poster}" class="poster_acteur" alt="{ actor.name }">
+                        <p class="nom_acteur">{ actor.name }</p>
+                    </a>{ actor !== state.acteurs[state.acteurs.length - 1] ? ', ' : '' }
+        
+                </p>
+                <p class="categ"><B>Genres: {state.genres}</B></p> <!-- Affichage de tous les genres -->
+                <a href="{state.urlTrailer}{state.key}" target="blanked" >
+                    <img src="{state.src_image}" alt="{state.titre}" class="lienVideo">
+                    <p>{state.textTrailer}{state.site}.</p>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+         a .lienVideo{
+            max-width: 500px;
+            max-height: 250px;
+            text-decoration: none;
+            margin-right: 10px;
+            transition: all ease 0.3s;
+        }
+
+        @keyframes deplacement {
+            0% { /* Début de l'animation */
+                transform: translateX(160%); /* Commence à l'extérieur de l'écran à gauche */
+            }
+            100% { /* Fin de l'animation */
+                transform: translateX(-160%); /* Sort de l'écran à droite */
+            }
+        }
+
+
+        h2{
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-top: 0;
+            display: inline-block;
+            margin-bottom: 1rem;
+            /*animation: deplacement 11s linear infinite;*/ /* 10 secondes pour aller de gauche à droite en boucle */
+        }
+        
+
+
+        .movie-details{
+            text-align: center;
+        }
+
+
+        .details{
+            width: 80%;
+            padding-left: 10%;
+            padding-right: 10%;
+            padding-bottom: 2%;
+            overflow: hidden;
+            text-align: left;
+            margin: 0;
+        }
+
+        #movie-box{
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #movie-box img{
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+
+        a .lienVideo:hover{
+            transform: scale(1.1);
+            transition: all ease 0.3s;
+        }
+
+        a{
+            display: flex;
+            align-items: center;
+            text-decoration: none; /* Supprime la décoration de lien par défaut */
+            color: black; /* Couleur du texte */
+        }
+
+        a p {
+            margin: 0; /* Supprime les marges par défaut */
+            text-decoration: underline; /* Souligne le texte */
+            color: inherit; /* Hérite de la couleur du texte parent */
+        }
+
+        a p:hover {
+            color: blue; /* Couleur du texte au survol */
+        }
+
+
+        .container_acteur{
+            display: flex;
+            font-size: 1.5rem;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .nom_acteur{
+            font-size: 1rem;
+        }
+
+        .categ{
+            font-size: 1.5rem;
+        }
+        .lien_acteur {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 3.5rem;
+        }
+
+        .lien_acteur .poster_acteur {
+            width: 7rem; 
+            height: auto;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+      
+
+    </style>
+    <script>
+        export default {
+            state: {
+                titre: '',
+                src_image: '',
+                nb_saisons: '',
+                nb_episodes: '',
+                synopsis: '',
+                site: 'youtube',
+                key: '',
+                textTrailer: 'Cliquer, pour visionner la bande annonce. ',
+                urlTrailer: 'https://www.youtube.com/watch?v=',
+                realisateur: '',
+                acteurs: '',
+                acteurs: [],
+                genres: ''
+            },
+
+            onMounted() {
+                const filmId = this.props.filmId;
+
+                    // Fetch series details
+                    fetch("https://api.themoviedb.org/3/tv/" + filmId + "?api_key=4ba60f27af3b66adeee089c33c5b3da6&language=fr-FR")
+                    .then(response => response.json())
+                    .then(data => {
+                        this.update({
+                            titre: data.name,
+                            nb_saisons: data.number_of_seasons,
+                            nb_episodes: data.number_of_episodes,
+                            src_image: "https://image.tmdb.org/t/p/w500" + data.poster_path,
+                            synopsis: data.overview,
+                            genres: data.genres.map(genre => genre.name).join(", ")
+                        });
+
+                        // Fetch movie credits for director and actors
+                        return fetch(`https://api.themoviedb.org/3/tv/${filmId}/credits?api_key=4ba60f27af3b66adeee089c33c5b3da6`);
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        const director = data.crew.find(member => member.job === 'Director')?.name;
+                        const topActors = data.cast.slice(0, 5).map(actor => ({id: actor.id, name: actor.name, poster: actor.profile_path}));
+                        this.update({
+                            acteurs: topActors
+                        });
+                    });
+
+                    fetch(`https://api.themoviedb.org/3/tv/${filmId}/videos?api_key=4ba60f27af3b66adeee089c33c5b3da6&language=fr-FR;`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.results.length > 0) { // Vérifie s'il y a des résultats
+                            const firstResult = data.results[0]; // Obtient le premier résultat
+                            console.log(firstResult);
+                            this.update({
+                                site: firstResult.site,
+                                key: firstResult.key
+                            });
+                        } else {
+                            this.update({
+                                site: '',
+                                key: '',
+                                urlTrailer: '',
+                                textTrailer: "Désolé, bande annonce indispo."
+                            });
+                        }
+                    });
+                
+            }
+        };
+    </script>
+</serie_detail>

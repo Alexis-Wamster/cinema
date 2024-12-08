@@ -1,0 +1,66 @@
+<erreur>
+    <div class="container">
+        <recherche></recherche>
+
+        <div class="main-content">
+            <p>{state.phrase}</p>
+            <button if={!window.location.href.includes("genre")} onclick={redirect_movie}>Retour sur la page d'accueil</button>
+            <button if={window.location.href.includes("genre")} onclick={redirect_movie}>Aller sur la page d'accueil pour les films</button>
+            <button if={window.location.href.includes("genre")} onclick={redirect_tv}>Aller sur la page d'accueil pour les séries</button>
+        </div>
+    </div>
+
+  <style>
+        /* Style de base pour tous les boutons */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #87CEEB;
+            margin-left: 10px;
+        }
+
+        main-content {
+            font-weight: bold; /* Applique le style gras au texte */
+            text-decoration: underline; /* Applique le style souligné au texte */
+}
+</style>
+    <script>
+        export default {
+            state: {
+                phrase: "",
+            },
+
+            onMounted() {
+                var actuel = window.location.href;
+                
+                if (actuel.includes("recent")) {
+                    this.state.phrase = "Oups.. Il n'est malheureusement pas possible de consulter la liste des séries les plus récentes :(";
+                }
+                else if (actuel.includes("comming")){
+                    this.state.phrase = "Oups.. Il n'est malheureusement pas possible de consulter la liste des séries à venir :(";
+                }
+                else if (actuel.includes("today")){
+                    this.state.phrase = "Oups.. Il n'est malheureusement pas possible de consulter la liste des films diffusés aujourd'hui :(";
+                }
+                else if (actuel.includes("curently")){
+                    this.state.phrase = "Oups.. Il n'est malheureusement pas possible de consulter la liste des films en cours de diffusion :(";
+                }
+                else if (actuel.includes("genre")){
+                    this.state.phrase = "Erreur ! Nous sommes désolés, mais certains genres ne sont pas disponibles, selon si c'est un film ou une série";
+                }
+                this.update();
+            },
+
+            redirect_movie(){
+                window.location.href = "#/movie"
+            },
+            redirect_tv(){
+                window.location.href = "#/tv"
+            }
+
+        }
+    </script>
+</erreur>

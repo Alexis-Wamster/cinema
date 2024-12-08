@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cinéma</title>
+        <link rel="stylesheet" href="./css/styles.css">
+        <script src="./node_modules/riot/riot+compiler.min.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <div class="container">
+                <h1 class="hola-animation">Films, Séries, Artistes...</h1>
+            </div>
+            
+            
+        </header>
+
+        <!--Corps de la page-->
+        <film></film>
+
+     
+
+        <!--DECLARATION COMPOSANT-->
+        <script src="https://unpkg.com/@riotjs/route/index.umd.js"></script>
+        <script type="riot" src="./riot/film.riot"></script>
+        <script type="riot" src="./riot/recherche.riot"></script>
+        <script type="riot" src="./riot/film_detail.riot"></script>
+        <script type="riot" src="./riot/serie_detail.riot"></script>
+        <script type="riot" src="./riot/recherche_text.riot"></script>
+        <script type="riot" src="./riot/recherche_genre.riot"></script>
+        <script type="riot" src="./riot/recherche_recent.riot"></script>
+        <script type="riot" src="./riot/recherche_note.riot"></script>
+        <script type="riot" src="./riot/recherche_today.riot"></script>
+        <script type="riot" src="./riot/recherche_curently.riot"></script>
+        <script type="riot" src="./riot/recherche_populaire.riot"></script>
+        <script type="riot" src="./riot/recherche_comming.riot"></script>
+        <script type="riot" src="./riot/erreur.riot"></script>
+        <script type="riot" src="./riot/acteur_detail.riot"></script>
+        <script>
+            riot.register('router', route.Router)
+            riot.register('route', route.Route)
+
+            riot.compile().then(function() {
+              riot.mount('film');
+            })
+
+            
+          </script>
+
+
+          
+    </body>
+
+</html>

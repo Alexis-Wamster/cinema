@@ -1,0 +1,101 @@
+<recherche_text>
+    <div class="container">
+        <recherche></recherche>
+
+        <div class="main-content">
+            <div id="miniBandeau">
+                <h2>{state.trie}</h2>
+                <p id="nPage"><b>Page:</b>{state.currentPage}</p>
+                <button id="bt_page_precedente" class="bt_pagin" onclick={decrementPage}>&laquo; Précédent</button>
+                <button class="bt_pagin">{state.currentPage}</button>
+                <button id="bt_page_suivant" class="bt_pagin" onclick={incrementPage}>Suivant &raquo;</button>
+            </div>
+            <div class="grid">
+                <div each="{ film in state.films }" class="item">
+                    <a href="#/{this.props.filmType}/detail/{film.id}">
+                        <img src="{ film.poster_path }" alt="{ film.title }">
+                        <div class="details">
+                            <h3>{ film.title }</h3>
+                            <p if="{ film.genres }"> <b>Genres: </b> { film.genres.join(', ') }</p>
+                            <p><b>Langue original: </b> { film.original_language }</p>
+                            <p><b>Note: </b> { film.vote_average }</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="pagination">
+                <button id="bt_page_precedente" class="bt_pagin" onclick="{decrementPage}">&laquo; Précédent</button>
+                <button class="bt_pagin">{state.currentPage}</button>
+                <button id="bt_page_suivant" class="bt_pagin" onclick="{incrementPage}">Suivant &raquo;</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        export default {
+            state: {
+                films: [],
+                currentPage: 1,
+                trie: '',
+                lastSearch: '',
+                lastType: '',
+                lastPage: 0,
+                max_page: 50, // Supposons que c'est la limite de pagination pour l'exemple
+            },
+
+            onMounted() {
+                this.fetchAndUpdateFilms();
+            },
+
+            onUpdated() {
+                if (this.props.filmTxt !== this.state.lastSearch || this.state.currentPage !== this.state.lastPage || this.props.filmType !== this.state.lastType) {
+                    
+                    this.fetchAndUpdateFilms();
+                }
+            },
+
+            fetchAndUpdateFilms() {
+                if (this.props.filmTxt !== this.state.lastSearch || this.props.filmType !== this.state.lastType) {
+                this.state.currentPage = 1;
+            }
+                // Vérifie si la recherche a changé ou si la page actuelle est différente de la dernière page mise à jour
+                if (this.props.filmTxt !== this.state.lastSearch || this.state.currentPage !== this.state.lastPage || this.props.filmType !== this.state.lastType) {
+                    this.fetchFilms();
+                    // Mise à jour des derniers états de recherche et de page après le chargement des données
+                    this.state.lastSearch = this.props.filmTxt;
+                    this.state.lastType = this.props.filmType;
+                    this.state.lastPage = this.state.currentPage;
+                    this.state.trie = 'Liste des films triée par recherche: ' + this.props.filmTxt;
+                }
+            },
+
+            fetchFilms() {
+                fetch(`https://api.themoviedb.org/3/search/${this.props.filmType}?api_key=4ba60f27af3b66adeee089c33c5b3da6&query=${this.props.filmTxt}&language=fr-FR&page=${this.state.currentPage}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.results);
+                    this.update({ films: data.results.map(film => ({
+                        ...film,
+                        poster_path: `https://image.tmdb.org/t/p/w500${film.poster_path}`,
+                    })),
+                    });
+                })
+                .catch(error => console.error('Erreur de chargement des films:', error));
+            },
+
+            decrementPage() {
+                if (this.state.currentPage > 1) {
+                    this.update({ currentPage: this.state.currentPage - 1 });
+                    this.fetchAndUpdateFilms();
+                }
+            },
+
+            incrementPage() {
+                if (this.state.currentPage < this.state.max_page) {
+                    this.update({ currentPage: this.state.currentPage + 1 });
+                    this.fetchAndUpdateFilms();
+                }
+            },
+        }
+    </script>
+</recherche_text>

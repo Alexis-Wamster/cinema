@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film 1</title>
+    <link rel="stylesheet" href="../css/styles2.css">
+    <script type="riot" src="../riot/film_detail.riot"></script>
+    <script src="../node_modules/riot/riot.min.js"></script>
+    <script src="../node_modules/riot/riot+compiler.min.js"></script>
+</head>
+<body>
+    
+    <film_detail></film_detail>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Liste de Films et Séries. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+<script>
+    riot.compile().then(()=>{
+        riot.mount('film_detail');
+    })
+</script>
+</html>

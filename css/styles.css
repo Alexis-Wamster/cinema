@@ -1,0 +1,146 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+}
+
+footer {
+    background-color: #00ff00;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    width: 100%;
+}
+
+header{
+    display: flex;
+    background-color: #03fff2;
+    color: #fff;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+}
+
+header .container{
+    justify-content: center;
+    align-items: center;
+}
+
+
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 20px;
+}
+
+.item {
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.item img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.item .details {
+    padding: 10px;
+}
+
+.item:hover{
+    transform: scale(1.1);
+}
+
+
+.genres {
+    list-style: none;
+    padding: 0;
+}
+
+.genres li {
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.genres li:hover {
+    background-color: #ddd;
+}
+
+footer {
+    margin-top: 20px;
+    height: auto;
+}
+
+.movie-container {
+    display: flex;
+    justify-content: flex-start; /* Alignement à gauche */
+    align-items: flex-start; /* Alignement en haut */
+}
+
+.movie-image {
+    flex: 0 0 auto; /* Taille fixe pour l'image */
+    margin-right: 20px; /* Espace à droite de l'image */
+}
+
+.movie-details {
+    flex: 1 1 auto; /* Laisse l'espace restant pour les détails */
+}
+
+.movie-details h2 {
+    margin-top: 0; /* Supprime la marge supérieure du titre */
+}
+
+.poster_acteur {
+    width: 50px; /* Taille des posters des acteurs */
+    height: auto;
+    margin-right: 5px; /* Espace entre les posters */
+}
+
+.nom_acteur {
+    display: inline-block; /* Affichage en ligne avec les posters */
+    margin: 0; /* Supprime les marges autour des noms des acteurs */
+}
+
+.bt_pagin {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px; /* Marge à droite entre les boutons */
+}
+
+/* Style spécifique pour le bouton Précédent avec l'ID #bt_page_precedente */
+#bt_page_precedente {
+    background-color: #6c757d; /* Couleur de fond différente */
+}
+
+/* Style spécifique pour le bouton Suivant avec l'ID #bt_page_suivant */
+#bt_page_suivant {
+    background-color: #28a745; /* Couleur de fond différente */
+}
+
+.grid a {
+    text-decoration: none; /* Supprime le soulignement des liens */
+    color: inherit; /* Utilise la couleur par défaut du texte */
+}
